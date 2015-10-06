@@ -1,0 +1,10 @@
+				
+				LeaveCaveRoom
+		EmptyCavePath	EmptyCavePath	JohnnyMorriceRoom
+		EmptyCavePath		
+		EmptyCavePath		
+		EmptyCavePath		
+PaulCroweRoom	EmptyCavePath	StartingRoom	EmptyCavePath	FindFistRoom
+		EmptyCavePath		
+	GavinLeechRoom	EmptyCavePath		
+		EmptyCavePath		

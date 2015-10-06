@@ -1,0 +1,9 @@
+,,,,LeaveCaveRoom
+,Find5GoldRoom,EmptyCavePath,EmptyCavePath,JohnnyMorriceRoom
+,,EmptyCavePath,,
+,,EmptyCavePath,,
+,,EmptyCavePath,,
+PaulCroweRoom,EmptyCavePath,StartingRoom,EmptyCavePath,FindFistRoom
+,,EmptyCavePath,,
+,GavinLeechRoom,EmptyCavePath,,
+,,SnakePitRoom,,
