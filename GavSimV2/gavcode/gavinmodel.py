@@ -20,19 +20,19 @@ class GavinModel():
         """This function has gavin eat a steak"""
         self.hunger = self.hunger + 5
         self.happiness = self.happiness - 5
-        return self.status(("eat", "steak", False))
+        return self.status(("eat", "steak"))
 
     def eat_carrot(self):
         """This function has gavin eat a carrot"""
         self.health = self.health + 1
         self.hunger = self.hunger + 1
         self.happiness = self.happiness + 1
-        return self.status(("eat", "carrot", False))
+        return self.status(("eat", "carrot"))
 
     def eat_nitro(self):
         """This function has gavin eat nitroglycerine"""
         self.health = self.health - 8
-        return self.status(("eat", "nitroglycerine", True))
+        return self.status(("eat", "nitroglycerine"))
 
     def status(self, message):
         state = [message]
