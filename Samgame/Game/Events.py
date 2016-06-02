@@ -31,7 +31,7 @@ class events:
             4: "year_of_plenty",
             5: "uneventful_year"
             }
-        self.events = ()
+        self.events = {}
         self.filename = "events_dict.json"
         if os.path.isfile(self.filename):
             self.load_file()
@@ -81,12 +81,14 @@ class events:
         print("Name: " + final_dict["name"])
         print("Description: " + final_dict["description"])
         for i in range(event_choices_count):
-              print("Choice " + str(i + 1) + " text: " + final_dict["choice " + str(i + 1)])
-              print("Choice " + str(i + 1) + " outcome: " + final_dict["outcome " + str(i + 1)])
+            stats_dict = final_dict["outcome " + str(i + 1)]
+            print("Choice " + str(i + 1) + " text: " + final_dict["choice " + str(i + 1)]),
+            for k, v in stats_dict.items():
+                  print(k + ", " + v)
         print("")
-        is_ok =("Is this ok? y/n")
+        is_ok = input("Is this ok? y/n")
         if is_ok == "y":
-            self.events[final_dict["name"]] = final_dict
+            self.events[new_event_name] = final_dict
             self.save_file()
         
     def run_random_event(self):

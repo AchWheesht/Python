@@ -16,3 +16,9 @@ print("")
 finaldict = {**testdict1, **testdict2}
 
 print(finaldict)
+
+newdict = {}
+
+newdict["first"] = finaldict
+
+print(newdict)
