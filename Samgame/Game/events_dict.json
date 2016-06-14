@@ -1,1 +1,0 @@
-{"MyEvent": {"outcome 1": {"effect 1": "player.supplies[\"Food\"] + 1"}, "name": "MyEvent", "choice 1": "Choose first", "description": "This is my event", "choice 2": "Choose second", "outcome 2": {"effect 1": "player.supplies[\"Water\"] - 1", "effect 2": "player.supplies[\"Air\"] + 1"}}}

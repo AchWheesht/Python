@@ -1,24 +1,5 @@
-testdict1 = {
-    "a": 10,
-    "b": 5
-    }
+string1 = "string 1"
 
-testdict2 = {
-    "c": 7,
-    "d": 3
-    }
+string2 = "string 2"
 
-print(testdict1)
-print("")
-print(testdict2)
-print("")
-
-finaldict = {**testdict1, **testdict2}
-
-print(finaldict)
-
-newdict = {}
-
-newdict["first"] = finaldict
-
-print(newdict)
+print("%s %s" % (string1, string2))
