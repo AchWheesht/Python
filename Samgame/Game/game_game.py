@@ -5,14 +5,19 @@ import game_Controller
 import game_Events
 import game_Nobles
 import game_Stats
+import game_Events_Functions
+import game_Events_Database
+
 import time
 
 #Here we set up the class instances for the game
 
+Controller = game_Controller.Controllerclass()
 Nobles = game_Nobles.Noblesclass()
 Stats = game_Stats.Statsclass()
 Events = game_Events.Eventsclass()
-Controller = game_Controller.Controllerclass()
+Event_Function = game_Events_Functions.Event_Functions()
+event_database = game_Events_Database.event_database
 
 #Next we run a function in stats to set up the starting stats. Doing it this way, rather than just setting up the stats
 #when we create the class instance, allows for two things; First, we can load saved files for the stats. Second, we can set up stats
@@ -21,11 +26,12 @@ Controller = game_Controller.Controllerclass()
 
 Stats.initialise_stats(Nobles, Stats, Events)
 Nobles.initialise_nobles()
+Event_Function.initialise_database()
 
 #Next, we tell controller to start collecting inputs. Currently, the main game loop is there - later, there will be periods where
 #loops should occur without inputs (running a series of events, for example).
 
-Controller.global_commands(Nobles, Stats, Events)
+Controller.global_commands(Nobles, Stats, Events, Event_Function, event_database)
 
 #If the player evver dies, the loops in controller  terminate and we get a death screen.
 

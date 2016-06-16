@@ -319,6 +319,7 @@ class Noblesclass:
                 return False
         if mode == "list":
             if len(true_list) != 0:
+                true_list.sort()
                 return true_list
             else:
                 return None

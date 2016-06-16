@@ -1,5 +1,3 @@
-string1 = "string 1"
+a = ("one", "two", "three")
 
-string2 = "string 2"
-
-print("%s %s" % (string1, string2))
+print(a[1])
