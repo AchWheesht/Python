@@ -1,3 +1,5 @@
-a = ("one", "two", "three")
+alist = []
 
-print(a[1])
+for i in range(10):
+    alist.append(i)
+    print(alist)

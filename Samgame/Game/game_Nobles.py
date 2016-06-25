@@ -8,7 +8,6 @@ import os
 import random
 import time
 
-
 class Noblesclass:
 
     def __init__(self):
@@ -22,8 +21,11 @@ class Noblesclass:
         "Official Boot Licker": None,
         "King's Personal Murderer": None,
         "King's least favourite individual": None,
-        "The King's second best cook": None
+        "King's second best cook": None
         }
+
+    def load_controller(self, Controller):
+        self.Controller = Controller
 
     #Looks for nobles who are employed, and updates the self.positions dictionary to reflect this.
     def initialise_nobles(self):
@@ -34,83 +36,74 @@ class Noblesclass:
                 self.positions[key] = noble["full_name"]
 
     #Displays all positions which are not filled by a noble
-    def view_empty_positions(self):
-        print("")
+    def view_empty_positions(self, mode):
+        alist = []
+        if mode == "print": print("")
         for k, v in self.positions.items():
             if not self.positions[k]:
-                print('"%s" is vacant' % k)
-        print("")
+                if mode == "list": alist.append(k)
+                elif mode == "print": print('"%s" is vacant' % k)
+                else: return
+        if mode == "print": print("")
+        if mode == "list":
+            alist.sort()
+            return alist
 
-    def view_filled_positions(self):
-        print("")
+    def view_filled_positions(self, mode):
+        alist = []
+        if mode == "print": print("")
         for k, v in self.positions.items():
             if self.positions[k]:
-                print('"%s": %s' % (k, self.positions[k]))
-        print("")
+                if mode == "list": alist.append((k, self.positions[k]))
+                elif mode == "print": print('"%s": %s' % (k, self.positions[k]))
+                else: return
+        if mode == "print": print("")
+        if mode == "list":
+            alist.sort()
+            return alist
 
     #Assigns a noble to a position
     def employ_noble(self):
-        print("")
-        print("Nobles currently available:")
-        available = self.stat_check("list", "employed", "=", False)
-        for i in range(len(available)):
-            print(available[i])
-        print("")
-        print("Positions Available:")
-        self.view_empty_positions()
-        print("")
+        available_nobles = self.stat_check("list", "employed", "=", False)
+        available_nobles.append("Cancel")
+        available_positions = self.view_empty_positions("list")
+        available_positions.append("Cancel")
         hold = True
-        while hold:
-            noble_input = input("Employ Which Noble? (or cancel)")
-            if noble_input == "cancel":
-                return
-            else:
-                for i in range(len(available)):
-                    if available[i] == noble_input:
-                        hold = False
-            if hold:
-                print("Not a valid Noble")
+        noble_input = self.Controller.get_input("Employ Which Noble? (or cancel)", "str", available_nobles)
+            #noble_input = input("Employ Which Noble? (or cancel)")
+        if noble_input == "Cancel": return
         hold = True
-        while hold:
-            position_input = input("For which position?")
-            if position_input == "cancel":
-                return
-            else:
-                for k, v in self.positions.items():
-                    if k == position_input:
-                        hold = False
-                if hold:
-                    print("Not a valid position")
+        position_input = self.Controller.get_input("For which position?", "str", available_positions)
+        if position_input == "Cancel": return
         noble = self.nobles[noble_input]
         noble["employed"] = True
         noble["position"] = position_input
         self.positions[position_input] = noble_input
         self.save_file()
+        print("%s is now the %s" % (noble_input, position_input))
 
     #Fires a noble from a position
     def fire_noble(self):
         print("\nCurrently Employed Nobles")
-        self.view_filled_positions()
-        while True:
-            fire_input = input("Fire Which Noble? (or cancel)")
-            fire_valid = None
-            if fire_input == "cancel":
-                return
-            else:
-                for k, v in self.positions.items():
-                    if self.positions[k] == fire_input:
-                        fire_valid = fire_input
-                        vacant_position = k
-            if fire_valid:
-                noble = self.nobles[fire_valid]
-                del noble["position"]
-                noble["employed"] = False
-                self.positions[vacant_position] = None
-                self.save_file()
-                print("%s successfully fired" %s (fire_valid))
-                return
-            else:
-                print("That Noble is not employed!")
+        position_list = self.view_filled_positions("list")
+        formatted_list = []
+        for i in range(len(position_list)):
+            hold = position_list[i]
+            formatted_list.append("%s: %s" % (hold[0], hold[1]))
+        formatted_list.append("Cancel")
+        fire_input = self.Controller.get_input("Fire Which Noble?)", "str", formatted_list)
+        if fire_input == "Cancel":
+            return
+        location = formatted_list.index(fire_input)
+        hold = position_list[location]
+        new_vacant = hold[0]
+        fired_noble = hold[1]
+        self.positions[new_vacant] = None
+        noble = self.nobles[fired_noble]
+        noble["employed"] = False
+        del noble["position"]
+        self.save_file()
+        print("%s successfully fired" % (fired_noble))
 
     #Shows Names of all Nobles
     def view_names(self):
@@ -119,23 +112,29 @@ class Noblesclass:
             print(k)
         print("")
 
+    def list_names(self):
+        noble_list = []
+        for k, v in self.nobles.items():
+            noble_list.append(k)
+        return noble_list
+
     #Shows Names, Stats and Positions of all Nobles
     def view_everything(self):
         for k, v in self.nobles.items():
             self.get_stats(k)
 
     #asks for a Nobles name, then shows their stats and positions
-    def get_stats(self, request):
-        if request == "cancel":
+    def get_stats(self):
+        noble_list = self.list_names()
+        request = self.Controller.get_input("Which Noble?", "str", noble_list)
+        if request == "Cancel":
             print("Operation Cancelled")
             return
         try:
             noble = self.nobles[request]
             print("\nFull Name:   %s" % noble["extended_title"])
-            print("Intelligence %d" % noble["intel"])
-            print("Ambition:    %d" % noble["ambition"])
-            print("Network:     %d" % noble["network"])
-            print("Wealth:      %d" % noble["wealth"])
+            print("Intelligence    %d  Ambition:    %d\nNetwork:        %d  Wealth:      %d"
+                  % (noble["intel"], noble["ambition"], noble["network"], noble["wealth"]))
             try:
                 print("A member of the kings court: %s\n" % noble["position"])
             except KeyError:
@@ -190,12 +189,15 @@ class Noblesclass:
         return[full_name, full_title, extended_title]           #Returns a list of three values
 
     #Creates a noble. Is passed "manual", it will asks for stats. If passed "random" it will randomly generate them.
-    def create_noble(self, mode):
+    def create_noble_random(self):
+        self.create_noble("random")
+
+    def create_noble(self, mode = "manual"):
         if mode == "manual":
-            intel = int(input("What is the Nobles intelligence? (0 - 10)"))
-            ambition = int(input("What is the Nobles ambition? (0 - 10)"))
-            network = int(input("How strong is the Nobles network? (0 - 10)"))
-            wealth = int(input("How wealthy is the Noble? (0 - 10)"))
+            intel = self.Controller.get_input("What is the Nobles intelligence? (0 - 10)", "int")
+            ambition = self.Controller.get_input("What is the Nobles ambition? (0 - 10)", "int")
+            network = self.Controller.get_input("How strong is the Nobles network? (0 - 10)", "int")
+            wealth = self.Controller.get_input("How wealthy is the Noble? (0 - 10)", "int")
             while True:
                 gender = str(input("Male or Female? (m/f)"))
                 gender = gender.lower()
@@ -278,8 +280,7 @@ class Noblesclass:
 
     #removes all nobles from the database
     def delete_all(self):
-        confirm = input("Are you sure? y/n")
-        if confirm == "y":
+        if self.Controller.get_input("Are you sure?", "bool"):
             all_nobles = []
             for k, v in self.nobles.items():
                 noble = self.nobles[k]
@@ -327,6 +328,7 @@ class Noblesclass:
 
     #Saves the nobles database file
     def save_file(self):
+        self.initialise_nobles()
         coded = json.dumps(self.nobles)
         with open(self.filename, "w") as file:
             file.write(coded)

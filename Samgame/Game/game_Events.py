@@ -6,13 +6,24 @@ import time
 import json
 import os
 import parser
+import eventsbeta
 
-class Eventsclass:
+class EventManager:
     def __init__(self):
-        self.events_dict_text = {}
+        # self.create_dictionary()
         self.filename = "events_dict.json"
         if os.path.isfile(self.filename):
             self.load_file()
+
+    def initialise_class(self, Nobles, Stats):
+        self.Nobles = Nobles
+        self.Stats = Stats
+        self.create_dictionary()
+
+    def create_dictionary(self):
+        self.event_dictionary = {
+        "famine": eventsbeta.FamineEvent
+        }
 
     def load_file(self):
         with open(self.filename, "r") as file:
@@ -35,14 +46,14 @@ class Eventsclass:
         elif Stats.supplies["Air"] <= 0:
             Stats.is_alive = False
 
-    def run_event(self, mode, event_name, Nobles, Stats, Events, Event_Function, event_database):
+    def run_event(self, event, mode):
         event_running = True
         choice = None
-        if mode == "manual":
-            event_lookup = Event_Function.function_database[event_name]
+        event = self.event_dictionary[event]()
+        if mode == "Manual":
             event_mode = "start"
             while event_running == True:
-                values = event_lookup(event_mode, choice, event_name, event_database, Nobles, Stats, Events)
+                values = event.run_event(event_mode, choice)
                 event_mode = values[1]
                 if event_mode == "done":
                     break

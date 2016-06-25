@@ -107,6 +107,7 @@ placenames_major = [
     "beyond the wall",
     "of many places",
     "of this here swamp",
+    "of the European Union!"
     ]
 
 placenames_minor = [
@@ -182,7 +183,6 @@ nicknames = [
     " the obviously fictional",
     " the munchkin",
     " the level 20 halfling rogue",
-    " the doom guy",
     " the ambiguous",
     " the scentless",
     " the eternally unlucky",
@@ -210,6 +210,11 @@ nicknames = [
     " of Top Gear fame",
     " the Eternal",
     ", Inventor of the Whirligig Thingmabob",
+    ", Heavyweight Champion of the World",
+    ", Booklord Primus",
+    " the etheral",
+    ": kill streak (16)"
+    " the murdertastic"
     ]
 
 eggs = {
